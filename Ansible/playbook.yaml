@@ -1,0 +1,38 @@
+---
+- name: infra update
+  hosts: all  # Replace with your server's hostname or IP address
+  become: true
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+- name: Install nano python git
+  hosts: all
+  become: true
+  tasks:
+    - name: install packeges
+      package:
+        name: "{{item}}"  
+        state: present  
+      loop:
+        - nano
+        - python3
+        - git
+        - curl
+        - build-esentials
+  - name: instanll brew shell
+    hosts: all
+    become: true
+      tasks:
+        - name: run shell command
+          command: >
+           /bin/bash -c "$(curl -fsSL https://raw.githubusercont.com/Homebrew/install/HEAD/install.sh)"
+          args:
+            creates: /hom/linuxbrew/ .linuxbrew/bin/brew
+          environment:
+            SHELL: /bin/bash 
+  - name: Add Homebrew to PATH
+    lineinfile:
+      path: /etc/environment
+      line: 'PATH="/home/linuxbrew/ .linuxbrew/bin:$PATH"'
